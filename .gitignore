@@ -1,2 +1,3 @@
 public/uploads/videos/*.mp4
 public/uploads/banners/**.jpg
+node_modules
