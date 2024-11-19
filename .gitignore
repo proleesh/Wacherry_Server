@@ -1,3 +1,5 @@
 public/uploads/videos/*.mp4
 public/uploads/banners/**.jpg
-node_modules
+public/uploads/shortforms/*.mp4
+/node_modules
+/dist
