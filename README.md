@@ -17,6 +17,8 @@
 최민성(정보 수집): 자료 수집 및 동작 테스트
 박윤호(정보 수집): 자료 수집 및 동작 테스트
 ```
+## EDR
+![alt text](Wacherry_EDR.png)
 
 ## Skill: Nest.js + bun
 
