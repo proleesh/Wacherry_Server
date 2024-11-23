@@ -22,6 +22,9 @@
 
 ![alt text](Wacherry_ERD.png)
 
+## UCD
+![alt text](<USECASE Diagram.drawio.png>)
+
 ## Skill: Nest.js + bun
 
 ### 이 Repository는 Nest.js과 bun로 구축된 Back-end로 구현된 비디오 스트리밍 서비스 API를 제공합니다. 이 서비스는 비디오 업로드, HLS 기반 스트리밍, 실시간 채팅 기능 로직을 구현했습니다.
