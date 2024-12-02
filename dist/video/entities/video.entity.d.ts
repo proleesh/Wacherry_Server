@@ -10,4 +10,5 @@ export declare class Video {
     likes: number;
     dislikes: number;
     reactions: VideoReaction[];
+    views: number;
 }

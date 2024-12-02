@@ -39,4 +39,7 @@ export class Video {
 
   @OneToMany(() => VideoReaction, (reaction) => reaction.video)
   reactions: VideoReaction[];
+
+  @Column({ default: 0 })
+  views: number;
 }

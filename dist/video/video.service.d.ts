@@ -19,6 +19,7 @@ export declare class VideoService {
         likes: number;
         dislikes: number;
         reactions: VideoReaction[];
+        views: number;
     }[]>;
     findOne(id: number, req: Request): Promise<{
         url: string;
@@ -30,6 +31,7 @@ export declare class VideoService {
         likes: number;
         dislikes: number;
         reactions: VideoReaction[];
+        views: number;
     }>;
     remove(id: number): Promise<import("typeorm").DeleteResult>;
     reactToVideo(videoId: number, userId: number, reactionType: 'like' | 'dislike'): Promise<{
@@ -41,4 +43,5 @@ export declare class VideoService {
         likes: number;
         dislikes: number;
     }>;
+    incrementViewCount(videoId: number): Promise<number>;
 }

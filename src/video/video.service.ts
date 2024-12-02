@@ -133,4 +133,15 @@ export class VideoService {
 
     return { likes, dislikes };
   }
+
+  async incrementViewCount(videoId: number): Promise<number> {
+    const video = await this.videoRepository.findOne({
+      where: { id: videoId },
+    });
+    if (!video) throw new NotFoundException('Video not found');
+    video.views += 1;
+    await this.videoRepository.save(video);
+
+    return video.views;
+  }
 }

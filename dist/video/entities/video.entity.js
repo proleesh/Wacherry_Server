@@ -53,6 +53,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => video_reaction_entity_1.VideoReaction, (reaction) => reaction.video),
     __metadata("design:type", Array)
 ], Video.prototype, "reactions", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 0 }),
+    __metadata("design:type", Number)
+], Video.prototype, "views", void 0);
 exports.Video = Video = __decorate([
     (0, typeorm_1.Entity)('videos')
 ], Video);

@@ -104,4 +104,12 @@ export class VideoController {
   async getVideoReactions(@Param('id') videoId: number) {
     return await this.videoService.getVideoReactions(videoId);
   }
+
+  @Post(':id/view')
+  async incrementViewCount(
+    @Param('id') videoId: number,
+  ): Promise<{ views: number }> {
+    const views = await this.videoService.incrementViewCount(videoId);
+    return { views };
+  }
 }

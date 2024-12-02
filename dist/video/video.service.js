@@ -120,6 +120,16 @@ let VideoService = class VideoService {
         });
         return { likes, dislikes };
     }
+    async incrementViewCount(videoId) {
+        const video = await this.videoRepository.findOne({
+            where: { id: videoId },
+        });
+        if (!video)
+            throw new common_1.NotFoundException('Video not found');
+        video.views += 1;
+        await this.videoRepository.save(video);
+        return video.views;
+    }
 };
 exports.VideoService = VideoService;
 exports.VideoService = VideoService = __decorate([
