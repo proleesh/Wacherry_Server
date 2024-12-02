@@ -14,12 +14,17 @@ const video_service_1 = require("./video.service");
 const video_controller_1 = require("./video.controller");
 const category_module_1 = require("../category/category.module");
 const video_gateway_1 = require("./video.gateway");
+const video_reaction_entity_1 = require("./entities/video-reaction.entity");
+const user_entity_1 = require("../user/entities/user.entity");
 let VideoModule = class VideoModule {
 };
 exports.VideoModule = VideoModule;
 exports.VideoModule = VideoModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([video_entity_1.Video]), category_module_1.CategoryModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([video_entity_1.Video, user_entity_1.User, video_reaction_entity_1.VideoReaction]),
+            category_module_1.CategoryModule,
+        ],
         providers: [video_service_1.VideoService, video_gateway_1.VideoGateway],
         controllers: [video_controller_1.VideoController],
     })

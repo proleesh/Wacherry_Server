@@ -1,4 +1,5 @@
 import { Category } from 'src/category/entities/category.entity';
+import { VideoReaction } from './video-reaction.entity';
 export declare class Video {
     id: number;
     title: string;
@@ -6,4 +7,7 @@ export declare class Video {
     url: string;
     createAt: Date;
     category: Category;
+    likes: number;
+    dislikes: number;
+    reactions: VideoReaction[];
 }

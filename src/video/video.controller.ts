@@ -82,4 +82,26 @@ export class VideoController {
   remove(@Param('id') id: string) {
     return this.videoService.remove(+id);
   }
+
+  @Post(':id/react')
+  async reactToVideo(
+    @Param('id') videoId: number,
+    @Body('userId') userId: number,
+    @Body('reaction') reaction: 'like' | 'dislike',
+  ) {
+    return await this.videoService.reactToVideo(videoId, userId, reaction);
+  }
+
+  @Delete(':id/reaction')
+  async removeReaction(
+    @Param('id') videoId: number,
+    @Body('userId') userId: number,
+  ) {
+    return await this.videoService.removeReaction(videoId, userId);
+  }
+
+  @Get(':id/reactions')
+  async getVideoReactions(@Param('id') videoId: number) {
+    return await this.videoService.getVideoReactions(videoId);
+  }
 }

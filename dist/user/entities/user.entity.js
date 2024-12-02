@@ -13,6 +13,7 @@ exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const bcrypt = require("bcryptjs");
 const shortform_entity_1 = require("../../shortform/entities/shortform.entity");
+const video_reaction_entity_1 = require("../../video/entities/video-reaction.entity");
 let User = class User {
     async validatePassword(password) {
         return bcrypt.compare(password, this.password);
@@ -47,6 +48,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => shortform_entity_1.ShortForm, (shortForm) => shortForm.user),
     __metadata("design:type", Array)
 ], User.prototype, "shortForms", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => video_reaction_entity_1.VideoReaction, (reaction) => reaction.user),
+    __metadata("design:type", Array)
+], User.prototype, "reactions", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)('user'),
     (0, typeorm_1.Unique)(['username'])

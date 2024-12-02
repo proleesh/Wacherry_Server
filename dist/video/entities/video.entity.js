@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Video = void 0;
 const category_entity_1 = require("../../category/entities/category.entity");
 const typeorm_1 = require("typeorm");
+const video_reaction_entity_1 = require("./video-reaction.entity");
 let Video = class Video {
 };
 exports.Video = Video;
@@ -40,6 +41,18 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'categoryId' }),
     __metadata("design:type", category_entity_1.Category)
 ], Video.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 0 }),
+    __metadata("design:type", Number)
+], Video.prototype, "likes", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 0 }),
+    __metadata("design:type", Number)
+], Video.prototype, "dislikes", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => video_reaction_entity_1.VideoReaction, (reaction) => reaction.video),
+    __metadata("design:type", Array)
+], Video.prototype, "reactions", void 0);
 exports.Video = Video = __decorate([
     (0, typeorm_1.Entity)('videos')
 ], Video);

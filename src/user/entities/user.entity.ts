@@ -7,6 +7,8 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { ShortForm } from 'src/shortform/entities/shortform.entity';
+import { Video } from 'src/video/entities/video.entity';
+import { VideoReaction } from 'src/video/entities/video-reaction.entity';
 
 @Entity('user')
 @Unique(['username'])
@@ -31,6 +33,9 @@ export class User {
 
   @OneToMany(() => ShortForm, (shortForm) => shortForm.user)
   shortForms: ShortForm[];
+
+  @OneToMany(() => VideoReaction, (reaction) => reaction.user)
+  reactions: VideoReaction[];
 
   async validatePassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);
