@@ -26,7 +26,8 @@ let UserController = class UserController {
     }
     async register(body) {
         try {
-            return await this.userService.register(body.username, body.password, body.nickname, body.isAdmin || false);
+            const defaultAvatar = '/uploads/avatars/default-avt.png';
+            return await this.userService.register(body.username, body.password, body.nickname, body.isAdmin || false, defaultAvatar);
         }
         catch (error) {
             if (error instanceof common_1.ConflictException) {
@@ -46,6 +47,14 @@ let UserController = class UserController {
         console.log(req.user);
         return 'upload successful';
     }
+    async uploadAvatar(id, file) {
+        if (!file) {
+            throw new Error('No file uploaded');
+        }
+        const avatarUrl = `/uploads/avatars/${file.filename}`;
+        await this.userService.updateAvatar(id, avatarUrl);
+        return { avatar: avatarUrl };
+    }
     async uploadBanner(id, file) {
         const bannerUrl = `/uploads/banners/${file.filename}`;
         await this.userService.updateBannerUrl(id, bannerUrl);
@@ -53,6 +62,14 @@ let UserController = class UserController {
     }
     async getUser(id) {
         return await this.userService.findUserById(id);
+    }
+    async getAvatar(id) {
+        const user = await this.userService.findUserById(id);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const defaultAvatar = '/uploads/avatars/default-avt.png';
+        return { avatarUrl: user.avatar || defaultAvatar };
     }
 };
 exports.UserController = UserController;
@@ -79,6 +96,30 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "upload", null);
 __decorate([
+    (0, common_1.Patch)(':id/avatar'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './public/uploads/avatars',
+            filename: (req, file, cb) => {
+                const uniqueName = `${(0, uuid_1.v4)()}${(0, path_1.extname)(file.originalname)}`;
+                cb(null, uniqueName);
+            },
+        }),
+        fileFilter: (req, file, cb) => {
+            const allowedMimeTypes = ['image/jpeg', 'image/png'];
+            if (!allowedMimeTypes.includes(file.mimetype)) {
+                return cb(new Error('Invalid file type'), false);
+            }
+            cb(null, true);
+        },
+    })),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "uploadAvatar", null);
+__decorate([
     (0, common_1.Patch)(':id/banner'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
@@ -103,6 +144,13 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getUser", null);
+__decorate([
+    (0, common_1.Get)(':id/avatar'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getAvatar", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [user_service_1.UserService])

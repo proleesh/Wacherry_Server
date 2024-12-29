@@ -62,7 +62,7 @@ let UserService = class UserService {
         }
         return customId;
     }
-    async register(username, password, nickname, isAdmin = false) {
+    async register(username, password, nickname, isAdmin = false, avatar) {
         const existingUser = await this.userRepository.findOne({
             where: { username },
         });
@@ -74,6 +74,8 @@ let UserService = class UserService {
             username,
             password: hashedPassword,
             nickname,
+            isAdmin,
+            avatar,
         });
         if (isAdmin) {
             user.customId = await this.generateAdminCustomId();
@@ -106,6 +108,7 @@ let UserService = class UserService {
             username: user.username,
             sub: user.id,
             nickname: user.nickname,
+            avatar: user.avatar,
         };
         return {
             access_token: this.jwtService.sign(payload),
@@ -115,6 +118,7 @@ let UserService = class UserService {
                 nickname: user.nickname,
                 customId: user.customId,
                 bannerUrl: user.bannerUrl,
+                avatar: user.avatar,
             },
         };
     }
@@ -131,6 +135,14 @@ let UserService = class UserService {
             throw new common_1.NotFoundException('User not found');
         }
         return user;
+    }
+    async updateAvatar(id, avatarUrl) {
+        const user = await this.userRepository.findOneBy({ id });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        user.avatar = avatarUrl;
+        await this.userRepository.save(user);
     }
 };
 exports.UserService = UserService;

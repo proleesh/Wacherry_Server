@@ -45,6 +45,14 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "bannerUrl", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "avatar", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "isAdmin", void 0);
+__decorate([
     (0, typeorm_1.OneToMany)(() => shortform_entity_1.ShortForm, (shortForm) => shortForm.user),
     __metadata("design:type", Array)
 ], User.prototype, "shortForms", void 0);

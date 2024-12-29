@@ -19,11 +19,18 @@ export declare class UserController {
             nickname: any;
             customId: any;
             bannerUrl: any;
+            avatar: any;
         };
     }>;
     upload(req: any): Promise<string>;
+    uploadAvatar(id: number, file: Express.Multer.File): Promise<{
+        avatar: string;
+    }>;
     uploadBanner(id: number, file: Express.Multer.File): Promise<{
         bannerUrl: string;
     }>;
     getUser(id: number): Promise<import("./entities/user.entity").User>;
+    getAvatar(id: number): Promise<{
+        avatarUrl: string;
+    }>;
 }

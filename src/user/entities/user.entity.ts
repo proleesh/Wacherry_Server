@@ -31,6 +31,12 @@ export class User {
   @Column({ nullable: true })
   bannerUrl: string;
 
+  @Column({ nullable: true })
+  avatar: string;
+
+  @Column({ default: false })
+  isAdmin: boolean;
+
   @OneToMany(() => ShortForm, (shortForm) => shortForm.user)
   shortForms: ShortForm[];
 

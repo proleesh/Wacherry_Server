@@ -7,6 +7,8 @@ export declare class User {
     password: string;
     nickname: string;
     bannerUrl: string;
+    avatar: string;
+    isAdmin: boolean;
     shortForms: ShortForm[];
     reactions: VideoReaction[];
     validatePassword(password: string): Promise<boolean>;

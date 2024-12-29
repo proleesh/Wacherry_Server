@@ -70,6 +70,7 @@ export class UserService {
     password: string,
     nickname: string,
     isAdmin: boolean = false,
+    avatar: string,
   ) {
     const existingUser = await this.userRepository.findOne({
       where: { username },
@@ -82,6 +83,8 @@ export class UserService {
       username,
       password: hashedPassword,
       nickname,
+      isAdmin,
+      avatar,
     });
 
     if (isAdmin) {
@@ -117,6 +120,7 @@ export class UserService {
       username: user.username,
       sub: user.id,
       nickname: user.nickname,
+      avatar: user.avatar,
     };
     return {
       access_token: this.jwtService.sign(payload),
@@ -126,6 +130,7 @@ export class UserService {
         nickname: user.nickname,
         customId: user.customId,
         bannerUrl: user.bannerUrl,
+        avatar: user.avatar,
       },
     };
   }
@@ -143,5 +148,14 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
     return user;
+  }
+
+  async updateAvatar(id: number, avatarUrl: string): Promise<void> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.avatar = avatarUrl;
+    await this.userRepository.save(user);
   }
 }

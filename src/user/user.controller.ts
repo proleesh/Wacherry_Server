@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { extname } from 'path';
+import path, { extname } from 'path';
 
 @Controller('users')
 export class UserController {
@@ -34,11 +34,13 @@ export class UserController {
     },
   ) {
     try {
+      const defaultAvatar = '/uploads/avatars/default-avt.png';
       return await this.userService.register(
         body.username,
         body.password,
         body.nickname,
         body.isAdmin || false,
+        defaultAvatar,
       );
     } catch (error) {
       // 만약에 계정 이름이 아이디랑 같을 때 예외처리
@@ -68,6 +70,37 @@ export class UserController {
     return 'upload successful';
   }
 
+  @Patch(':id/avatar')
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      storage: diskStorage({
+        destination: './public/uploads/avatars',
+        filename: (req, file, cb) => {
+          const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = ['image/jpeg', 'image/png'];
+        if (!allowedMimeTypes.includes(file.mimetype)) {
+          return cb(new Error('Invalid file type'), false);
+        }
+        cb(null, true);
+      },
+    }),
+  )
+  async uploadAvatar(
+    @Param('id') id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new Error('No file uploaded');
+    }
+    const avatarUrl = `/uploads/avatars/${file.filename}`;
+    await this.userService.updateAvatar(id, avatarUrl);
+    return { avatar: avatarUrl };
+  }
+
   @Patch(':id/banner')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -91,9 +124,17 @@ export class UserController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: number){
+  async getUser(@Param('id') id: number) {
     return await this.userService.findUserById(id);
   }
 
-  
+  @Get(':id/avatar')
+  async getAvatar(@Param('id') id: number) {
+    const user = await this.userService.findUserById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const defaultAvatar = '/uploads/avatars/default-avt.png';
+    return { avatarUrl: user.avatar || defaultAvatar };
+  }
 }
