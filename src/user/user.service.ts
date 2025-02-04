@@ -17,6 +17,10 @@ export class UserService {
     private jwtService: JwtService,
   ) {}
 
+  async findAllUsers() {
+    return await this.userRepository.find();
+  }
+
   // 랜덤으로 시스템에서 주는 아이디 생성 로직
   // 관리자 아이디 생성 로직 10000 ~ 10009는 관리자용 아이디
   private async generateAdminCustomId(): Promise<number> {

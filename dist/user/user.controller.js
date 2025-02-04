@@ -24,6 +24,9 @@ let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
+    async getAllUsers() {
+        return await this.userService.findAllUsers();
+    }
     async register(body) {
         try {
             const defaultAvatar = '/uploads/avatars/default-avt.png';
@@ -73,6 +76,12 @@ let UserController = class UserController {
     }
 };
 exports.UserController = UserController;
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getAllUsers", null);
 __decorate([
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),

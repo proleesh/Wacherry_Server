@@ -24,6 +24,9 @@ let UserService = class UserService {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
     }
+    async findAllUsers() {
+        return await this.userRepository.find();
+    }
     async generateAdminCustomId() {
         for (let customId = 10000; customId <= 10009; ++customId) {
             const existingUser = await this.userRepository.findOne({

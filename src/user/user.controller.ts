@@ -23,6 +23,10 @@ import path, { extname } from 'path';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get()
+  async getAllUsers() {
+    return await this.userService.findAllUsers();
+  }
   @Post('register')
   async register(
     @Body()

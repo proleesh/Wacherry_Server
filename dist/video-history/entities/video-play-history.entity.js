@@ -26,7 +26,7 @@ __decorate([
     __metadata("design:type", user_entity_1.User)
 ], VideoPlayHistory.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => video_entity_1.Video, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => video_entity_1.Video, video => video.playHistory, { onDelete: 'CASCADE' }),
     (0, typeorm_1.JoinColumn)({ name: 'video_id' }),
     __metadata("design:type", video_entity_1.Video)
 ], VideoPlayHistory.prototype, "video", void 0);

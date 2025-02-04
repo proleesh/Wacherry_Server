@@ -12,12 +12,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const video_history_controller_1 = require("./video-history.controller");
 const video_history_service_1 = require("./video-history.service");
 const video_play_history_entity_1 = require("./entities/video-play-history.entity");
+const video_entity_1 = require("../video/entities/video.entity");
 let VideoHistoryModule = class VideoHistoryModule {
 };
 exports.VideoHistoryModule = VideoHistoryModule;
 exports.VideoHistoryModule = VideoHistoryModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([video_play_history_entity_1.VideoPlayHistory])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([video_play_history_entity_1.VideoPlayHistory, video_entity_1.Video])],
         controllers: [video_history_controller_1.VideoHistoryController],
         providers: [video_history_service_1.VideoHistoryService],
     })

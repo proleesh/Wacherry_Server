@@ -23,6 +23,7 @@ export declare class VideoController {
         dislikes: number;
         reactions: import("./entities/video-reaction.entity").VideoReaction[];
         views: number;
+        playHistory: import("../video-history/entities/video-play-history.entity").VideoPlayHistory[];
     }[]>;
     findOne(id: string, req: Request): Promise<{
         url: string;
@@ -35,6 +36,7 @@ export declare class VideoController {
         dislikes: number;
         reactions: import("./entities/video-reaction.entity").VideoReaction[];
         views: number;
+        playHistory: import("../video-history/entities/video-play-history.entity").VideoPlayHistory[];
     }>;
     remove(id: string): Promise<import("typeorm").DeleteResult>;
     reactToVideo(videoId: number, userId: number, reaction: 'like' | 'dislike'): Promise<{

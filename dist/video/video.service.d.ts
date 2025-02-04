@@ -20,6 +20,7 @@ export declare class VideoService {
         dislikes: number;
         reactions: VideoReaction[];
         views: number;
+        playHistory: import("../video-history/entities/video-play-history.entity").VideoPlayHistory[];
     }[]>;
     findOne(id: number, req: Request): Promise<{
         url: string;
@@ -32,6 +33,7 @@ export declare class VideoService {
         dislikes: number;
         reactions: VideoReaction[];
         views: number;
+        playHistory: import("../video-history/entities/video-play-history.entity").VideoPlayHistory[];
     }>;
     remove(id: number): Promise<import("typeorm").DeleteResult>;
     reactToVideo(videoId: number, userId: number, reactionType: 'like' | 'dislike'): Promise<{

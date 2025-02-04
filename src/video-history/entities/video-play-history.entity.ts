@@ -17,7 +17,7 @@ export class VideoPlayHistory {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Video, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Video, video => video.playHistory, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'video_id' })
   video: Video;
 

@@ -20,6 +20,7 @@ let VideoHistoryController = class VideoHistoryController {
         this.historyService = historyService;
     }
     async addHistory(body) {
+        console.log('Received Request:', body);
         return this.historyService.create(body.userId, body.videoId);
     }
     async getHistory(userId) {

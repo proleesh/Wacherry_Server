@@ -7,6 +7,7 @@ export class VideoHistoryController {
 
   @Post()
   async addHistory(@Body() body: { userId: number; videoId: number }) {
+    console.log('Received Request:', body);
     return this.historyService.create(body.userId, body.videoId);
   }
   @Get(':userId')

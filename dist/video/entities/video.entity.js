@@ -13,6 +13,7 @@ exports.Video = void 0;
 const category_entity_1 = require("../../category/entities/category.entity");
 const typeorm_1 = require("typeorm");
 const video_reaction_entity_1 = require("./video-reaction.entity");
+const video_play_history_entity_1 = require("../../video-history/entities/video-play-history.entity");
 let Video = class Video {
 };
 exports.Video = Video;
@@ -57,6 +58,10 @@ __decorate([
     (0, typeorm_1.Column)({ default: 0 }),
     __metadata("design:type", Number)
 ], Video.prototype, "views", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => video_play_history_entity_1.VideoPlayHistory, (history) => history.video),
+    __metadata("design:type", Array)
+], Video.prototype, "playHistory", void 0);
 exports.Video = Video = __decorate([
     (0, typeorm_1.Entity)('videos')
 ], Video);

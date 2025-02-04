@@ -10,6 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { VideoReaction } from './video-reaction.entity';
+import { VideoPlayHistory } from 'src/video-history/entities/video-play-history.entity';
 
 @Entity('videos')
 export class Video {
@@ -42,4 +43,7 @@ export class Video {
 
   @Column({ default: 0 })
   views: number;
+
+  @OneToMany(() => VideoPlayHistory, (history) => history.video)
+  playHistory: VideoPlayHistory[];
 }

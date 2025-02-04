@@ -5,6 +5,7 @@ export declare class UserService {
     private userRepository;
     private jwtService;
     constructor(userRepository: Repository<User>, jwtService: JwtService);
+    findAllUsers(): Promise<User[]>;
     private generateAdminCustomId;
     private generateUniqueCustomId;
     register(username: string, password: string, nickname: string, isAdmin: boolean, avatar: string): Promise<User>;
