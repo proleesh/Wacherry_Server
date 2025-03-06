@@ -8,8 +8,12 @@ import { User } from 'src/user/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordResetController } from 'src/resetaccount/passwordreset.controller';
 import * as cors from 'cors';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     JwtModule.register({
       secret: 'secretKey',
       signOptions: { expiresIn: '1h' },
@@ -17,12 +21,12 @@ import * as cors from 'cors';
     TypeOrmModule.forFeature([User]),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.mail.yahoo.com',
+        host: process.env.EMAIL_HOST,
         port: 465, // SSL 포트 사용
         secure: true,
         auth: {
-          user: 'merci726@yahoo.com',
-          pass: 'splddfbcbuveubma',
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         },
       },
       defaults: {

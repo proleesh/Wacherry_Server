@@ -17,6 +17,7 @@ const user_entity_1 = require("../user/entities/user.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const passwordreset_controller_1 = require("../resetaccount/passwordreset.controller");
 const cors = require("cors");
+const config_1 = require("@nestjs/config");
 let AuthModule = class AuthModule {
     configure(consumer) {
         consumer.apply(cors()).forRoutes('*');
@@ -26,6 +27,9 @@ exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+            }),
             jwt_1.JwtModule.register({
                 secret: 'secretKey',
                 signOptions: { expiresIn: '1h' },
@@ -33,12 +37,12 @@ exports.AuthModule = AuthModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
             mailer_1.MailerModule.forRoot({
                 transport: {
-                    host: 'smtp.mail.yahoo.com',
+                    host: process.env.EMAIL_HOST,
                     port: 465,
                     secure: true,
                     auth: {
-                        user: 'merci726@yahoo.com',
-                        pass: 'splddfbcbuveubma',
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS,
                     },
                 },
                 defaults: {

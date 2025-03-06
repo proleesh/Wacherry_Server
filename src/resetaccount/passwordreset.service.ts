@@ -6,6 +6,7 @@ import { randomBytes } from 'crypto';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class PasswordResetService {
   constructor(
