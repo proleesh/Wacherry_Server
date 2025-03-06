@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
 import { randomBytes } from 'crypto';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
-import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class PasswordResetService {
   constructor(
@@ -22,6 +19,11 @@ export class PasswordResetService {
 
     const resetToken = randomBytes(32).toString('hex');
     const resetTokenExpiration = new Date();
+    const currentYear = new Date().getFullYear();
+    const currentHours = new Date().getHours();
+    const currentMinutes = new Date().getMinutes();
+    const currentSeconds = new Date().getSeconds();
+    const currentDate = `${currentYear}년 ${new Date().getMonth() + 1}월 ${new Date().getDate()}일 ${currentHours}시 ${currentMinutes}분 ${currentSeconds}초`;
     resetTokenExpiration.setHours(resetTokenExpiration.getHours() + 1);
 
     user.resetToken = resetToken;
@@ -32,7 +34,11 @@ export class PasswordResetService {
     await this.mailerService.sendMail({
       to: email,
       subject: '패스워드 다시 설정 요청',
-      text: `당신의 패스워드를 다시 설정할려면 해당 링크: ${resetUrl} 를 클릭하십시오.`,
+      text: `당신의 패스워드를 다시 설정할려면 해당 링크: ${resetUrl} 를 클릭하십시오.
+      당신이 보낸것이 아니면 해당 이메일을 삭제하세요. 
+      반대로 당신이 보낸것이면 빠른 시일내에 패스워드를 다시 설정하세요. ^^
+      SEDK Team ${currentDate} 에 보냄.
+      `,
     });
   }
 

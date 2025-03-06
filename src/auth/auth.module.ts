@@ -30,7 +30,7 @@ import { ConfigModule } from '@nestjs/config';
         },
       },
       defaults: {
-        from: '"No Reply" <merci726@yahoo.com>',
+        from: `"Wacherry with SDEK Team <No Reply-${process.env.EMAIL_FROM}>" <${process.env.EMAIL_FROM}>`,
       },
     }),
   ],
