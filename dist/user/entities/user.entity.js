@@ -14,6 +14,7 @@ const typeorm_1 = require("typeorm");
 const bcrypt = require("bcryptjs");
 const shortform_entity_1 = require("../../shortform/entities/shortform.entity");
 const video_reaction_entity_1 = require("../../video/entities/video-reaction.entity");
+const class_validate_1 = require("class-validate");
 let User = class User {
     async validatePassword(password) {
         return bcrypt.compare(password, this.password);
@@ -38,8 +39,14 @@ __decorate([
 ], User.prototype, "password", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
+    (0, class_validate_1.IsString)(),
     __metadata("design:type", String)
 ], User.prototype, "nickname", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true, nullable: true }),
+    (0, class_validate_1.IsEmail)(),
+    __metadata("design:type", String)
+], User.prototype, "email", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
@@ -60,6 +67,14 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => video_reaction_entity_1.VideoReaction, (reaction) => reaction.user),
     __metadata("design:type", Array)
 ], User.prototype, "reactions", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "resetToken", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, type: 'timestamp' }),
+    __metadata("design:type", Date)
+], User.prototype, "resetTokenExpiration", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)('user'),
     (0, typeorm_1.Unique)(['username'])

@@ -12,7 +12,6 @@ import { VideoHistoryModule } from './video-history/video-history.module';
 import { CategoryModule } from './category/category.module';
 import { CommentModule } from './comment/comment.module';
 import { ShortFormModule } from './shortform/shortform.module';
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({

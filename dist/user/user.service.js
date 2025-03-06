@@ -65,7 +65,7 @@ let UserService = class UserService {
         }
         return customId;
     }
-    async register(username, password, nickname, isAdmin = false, avatar) {
+    async register(username, password, nickname, email, isAdmin = false, avatar) {
         const existingUser = await this.userRepository.findOne({
             where: { username },
         });
@@ -77,6 +77,7 @@ let UserService = class UserService {
             username,
             password: hashedPassword,
             nickname,
+            email,
             isAdmin,
             avatar,
         });
@@ -146,6 +147,19 @@ let UserService = class UserService {
         }
         user.avatar = avatarUrl;
         await this.userRepository.save(user);
+    }
+    async save(user) {
+        await this.userRepository.save(user);
+    }
+    async findByEmail(email) {
+        return this.userRepository.findOne({
+            where: { email: email },
+        });
+    }
+    async findByResetToken(token) {
+        return await this.userRepository.findOne({
+            where: { resetToken: token },
+        });
     }
 };
 exports.UserService = UserService;

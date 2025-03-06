@@ -8,7 +8,7 @@ export declare class UserService {
     findAllUsers(): Promise<User[]>;
     private generateAdminCustomId;
     private generateUniqueCustomId;
-    register(username: string, password: string, nickname: string, isAdmin: boolean, avatar: string): Promise<User>;
+    register(username: string, password: string, nickname: string, email: string, isAdmin: boolean, avatar: string): Promise<User>;
     validateUser(userIdentifier: string, password: string): Promise<any>;
     login(user: any): Promise<{
         access_token: string;
@@ -24,4 +24,7 @@ export declare class UserService {
     updateBannerUrl(id: number, bannerUrl: string): Promise<User>;
     findUserById(id: number): Promise<User>;
     updateAvatar(id: number, avatarUrl: string): Promise<void>;
+    save(user: User): Promise<void>;
+    findByEmail(email: string): Promise<User>;
+    findByResetToken(token: string): Promise<User | undefined>;
 }

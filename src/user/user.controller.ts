@@ -34,6 +34,7 @@ export class UserController {
       username: string;
       password: string;
       nickname: string;
+      email: string;
       isAdmin?: boolean;
     },
   ) {
@@ -43,6 +44,7 @@ export class UserController {
         body.username,
         body.password,
         body.nickname,
+        body.email,
         body.isAdmin || false,
         defaultAvatar,
       );

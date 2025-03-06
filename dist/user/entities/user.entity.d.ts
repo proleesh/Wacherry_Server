@@ -6,10 +6,13 @@ export declare class User {
     username: string;
     password: string;
     nickname: string;
+    email: string;
     bannerUrl: string;
     avatar: string;
     isAdmin: boolean;
     shortForms: ShortForm[];
     reactions: VideoReaction[];
     validatePassword(password: string): Promise<boolean>;
+    resetToken: string;
+    resetTokenExpiration: Date;
 }

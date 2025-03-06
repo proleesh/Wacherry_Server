@@ -73,6 +73,7 @@ export class UserService {
     username: string,
     password: string,
     nickname: string,
+    email: string,
     isAdmin: boolean = false,
     avatar: string,
   ) {
@@ -87,6 +88,7 @@ export class UserService {
       username,
       password: hashedPassword,
       nickname,
+      email,
       isAdmin,
       avatar,
     });
@@ -161,5 +163,19 @@ export class UserService {
     }
     user.avatar = avatarUrl;
     await this.userRepository.save(user);
+  }
+
+  async save(user: User): Promise<void> {
+    await this.userRepository.save(user);
+  }
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: { email: email },
+    });
+  }
+  async findByResetToken(token: string): Promise<User | undefined> {
+    return await this.userRepository.findOne({
+      where: { resetToken: token },
+    });
   }
 }

@@ -30,7 +30,7 @@ let UserController = class UserController {
     async register(body) {
         try {
             const defaultAvatar = '/uploads/avatars/default-avt.png';
-            return await this.userService.register(body.username, body.password, body.nickname, body.isAdmin || false, defaultAvatar);
+            return await this.userService.register(body.username, body.password, body.nickname, body.email, body.isAdmin || false, defaultAvatar);
         }
         catch (error) {
             if (error instanceof common_1.ConflictException) {
