@@ -3,3 +3,4 @@ public/uploads/banners/**.jpg
 public/uploads/shortforms/*.mp4
 /node_modules
 /dist
+.env

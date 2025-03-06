@@ -37,7 +37,7 @@ export class PasswordResetService {
       text: `당신의 패스워드를 다시 설정할려면 해당 링크: ${resetUrl} 를 클릭하십시오.
       당신이 보낸것이 아니면 해당 이메일을 삭제하세요. 
       반대로 당신이 보낸것이면 빠른 시일내에 패스워드를 다시 설정하세요. ^^
-      SEDK Team ${currentDate} 에 보냄.
+      SDEK Team ${currentDate} 에 보냄.
       `,
     });
   }
