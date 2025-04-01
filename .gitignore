@@ -1,6 +1,7 @@
-public/uploads/videos/*.mp4
-public/uploads/banners/**.jpg
-public/uploads/shortforms/*.mp4
+/public/uploads/videos/*.mp4
+/public/uploads/videos/*.mov
+/public/uploads/banners/**.jpg
+/public/uploads/shortforms/*.mp4
 /node_modules
 /dist
 .env
