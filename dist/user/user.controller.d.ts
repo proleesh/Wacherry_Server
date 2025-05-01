@@ -11,7 +11,7 @@ export declare class UserController {
         isAdmin?: boolean;
     }): Promise<import("./entities/user.entity").User>;
     login(body: {
-        userIdentifier: string;
+        username: string;
         password: string;
     }): Promise<{
         access_token: string;

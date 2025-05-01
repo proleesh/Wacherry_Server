@@ -9,7 +9,7 @@ export declare class UserService {
     private generateAdminCustomId;
     private generateUniqueCustomId;
     register(username: string, password: string, nickname: string, email: string, isAdmin: boolean, avatar: string): Promise<User>;
-    validateUser(userIdentifier: string, password: string): Promise<any>;
+    validateUser(username: string, password: string): Promise<any>;
     login(user: any): Promise<{
         access_token: string;
         user: {

@@ -40,7 +40,7 @@ let UserController = class UserController {
         }
     }
     async login(body) {
-        const user = await this.userService.validateUser(body.userIdentifier, body.password);
+        const user = await this.userService.validateUser(body.username, body.password);
         if (!user) {
             throw new common_1.UnauthorizedException('아이디또는 패스워드 오류');
         }

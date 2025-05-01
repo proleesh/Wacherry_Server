@@ -89,16 +89,16 @@ let UserService = class UserService {
         }
         return this.userRepository.save(user);
     }
-    async validateUser(userIdentifier, password) {
+    async validateUser(username, password) {
         let user;
-        if (!isNaN(Number(userIdentifier))) {
+        if (!isNaN(Number(username))) {
             user = await this.userRepository.findOne({
-                where: { customId: Number(userIdentifier) },
+                where: { customId: Number(username) },
             });
         }
         else {
             user = await this.userRepository.findOne({
-                where: { username: userIdentifier },
+                where: { username: username },
             });
         }
         if (!user || !(await user.validatePassword(password))) {

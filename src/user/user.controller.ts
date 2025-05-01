@@ -58,9 +58,9 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body() body: { userIdentifier: string; password: string }) {
+  async login(@Body() body: { username: string; password: string }) {
     const user = await this.userService.validateUser(
-      body.userIdentifier,
+      body.username,
       body.password,
     );
     if (!user) {
