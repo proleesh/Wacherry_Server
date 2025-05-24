@@ -6,7 +6,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  create(@Body('name') name: string){
+  create(@Body('name') name: string) {
     return this.categoryService.create(name);
   }
 
@@ -22,6 +22,6 @@ export class CategoryController {
 
   @Delete(':id')
   remove(@Param('id') id: number) {
-      return this.categoryService.remove(id);
+    return this.categoryService.remove(id);
   }
 }

@@ -9,5 +9,4 @@ export declare class CommentGateway {
         username: string;
         content: string;
     }, client: Socket): Promise<void>;
-    handleJoinRoom(videoId: number, client: Socket): void;
 }

@@ -16,14 +16,16 @@ exports.VideoController = void 0;
 const common_1 = require("@nestjs/common");
 const video_service_1 = require("./video.service");
 const multer_1 = require("multer");
-const path_1 = require("path");
+const path = require("path");
 const uuid_1 = require("uuid");
 const platform_express_1 = require("@nestjs/platform-express");
 const category_service_1 = require("../category/category.service");
+const fs = require("fs");
 let VideoController = class VideoController {
     constructor(videoService, categoryService) {
         this.videoService = videoService;
         this.categoryService = categoryService;
+        this.logger = new common_1.Logger('VideoController');
     }
     create(videoData) {
         return this.videoService.create(videoData);
@@ -32,17 +34,40 @@ let VideoController = class VideoController {
         if (!file) {
             throw new common_1.HttpException('비디오 업로드 없음', common_1.HttpStatus.BAD_REQUEST);
         }
-        const category = await this.categoryService.findOne(body.categoryId);
-        if (!category) {
-            throw new common_1.NotFoundException('해당 카테고리 못 찾음!');
+        if (!file || !file.path) {
+            this.logger.error('파일이 정의되지 않음 또는 path 없음');
+            throw new common_1.InternalServerErrorException('파일 경로가 존재하지 않습니다.');
         }
-        const videoData = {
-            title: body.title,
-            description: body.description,
-            url: `uploads/videos/${file.filename}`,
-            category: category,
-        };
-        return await this.videoService.create(videoData);
+        try {
+            const category = await this.categoryService.findOne(body.categoryId);
+            if (!category) {
+                throw new common_1.NotFoundException('해당 카테고리 못 찾음!');
+            }
+            const filePath = path.join('./public/uploads/videos', file.filename);
+            console.log('>>> 변환에 전달된 filePath:', filePath);
+            if (!fs.existsSync(filePath)) {
+                this.logger.error(`파일 경로 존재하지 않음: ${filePath}`);
+                throw new common_1.InternalServerErrorException('파일 경로 오류');
+            }
+            const hlsPath = await this.videoService.convertToHLS(filePath);
+            console.log('⚠️ file:', file);
+            console.log('📎 file.filename:', file?.filename);
+            console.log('📎 file.destination:', file?.destination);
+            console.log('📎 생성된 filePath:', filePath);
+            const videoData = {
+                title: body.title,
+                description: body.description,
+                url: hlsPath,
+                originalUrl: `uploads/videos/${file.filename}`,
+                category: category,
+            };
+            return await this.videoService.create(videoData);
+        }
+        catch (err) {
+            this.logger.error(`업로드 중 오류 발생: ${err.message}`, err.stack, 'uploadVideo');
+            console.error(err);
+            throw new common_1.InternalServerErrorException('비디오 업로드 실패');
+        }
     }
     findAll(req) {
         return this.videoService.findAll(req);
@@ -80,12 +105,12 @@ __decorate([
         storage: (0, multer_1.diskStorage)({
             destination: './public/uploads/videos',
             filename: (req, file, callback) => {
-                const uniqueName = `${(0, uuid_1.v4)()}${(0, path_1.extname)(file.originalname)}`;
+                const uniqueName = `${(0, uuid_1.v4)()}${path.extname(file.originalname)}`;
                 callback(null, uniqueName);
             },
         }),
         limits: {
-            fileSize: 500 * 1024 * 1024,
+            fileSize: 100000 * 1024 * 1024,
         },
     })),
     __param(0, (0, common_1.UploadedFile)()),

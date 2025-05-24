@@ -22,6 +22,10 @@ let CommentController = class CommentController {
     findAll(videoId) {
         return this.commentService.findByVideoId(videoId);
     }
+    create(videoId, body) {
+        const { username, content } = body;
+        return this.commentService.create(videoId, username, content);
+    }
 };
 exports.CommentController = CommentController;
 __decorate([
@@ -31,6 +35,14 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], CommentController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Param)('videoId')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], CommentController.prototype, "create", null);
 exports.CommentController = CommentController = __decorate([
     (0, common_1.Controller)('videos/:videoId/comments'),
     __metadata("design:paramtypes", [comment_service_1.CommentService])

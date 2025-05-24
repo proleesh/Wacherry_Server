@@ -20,14 +20,10 @@ let CommentGateway = class CommentGateway {
     constructor(commentService) {
         this.commentService = commentService;
     }
-    ;
     async handleSendComment(data, client) {
         const { videoId, username, content } = data;
         const newComment = await this.commentService.create(videoId, username, content);
         this.server.to(videoId.toString()).emit('receiveComment', newComment);
-    }
-    handleJoinRoom(videoId, client) {
-        client.join(videoId.toString());
     }
 };
 exports.CommentGateway = CommentGateway;
@@ -43,14 +39,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
     __metadata("design:returntype", Promise)
 ], CommentGateway.prototype, "handleSendComment", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)('joinVideoRoom'),
-    __param(0, (0, websockets_1.MessageBody)('videoId')),
-    __param(1, (0, websockets_1.ConnectedSocket)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, socket_io_1.Socket]),
-    __metadata("design:returntype", void 0)
-], CommentGateway.prototype, "handleJoinRoom", null);
 exports.CommentGateway = CommentGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {

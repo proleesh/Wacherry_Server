@@ -12,7 +12,7 @@ import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: '*', // 모든 도메인에서 접근 허용
+    origin: ['https://wacherry.com', 'https://www.wacherry.com'],
     methods: ['GET', 'POST'], // 허용할 메서드
     credentials: true,
   },

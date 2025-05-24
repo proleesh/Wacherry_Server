@@ -9,7 +9,8 @@ import { ChatService } from './chat.service';
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: ['https://www.wacherry.com', 'https://wacherry.com'],
+    credentials: true,
   },
 })
 export class ChatGateway {

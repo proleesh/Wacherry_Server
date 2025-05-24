@@ -12,8 +12,30 @@ import { VideoHistoryModule } from './video-history/video-history.module';
 import { CategoryModule } from './category/category.module';
 import { CommentModule } from './comment/comment.module';
 import { ShortFormModule } from './shortform/shortform.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
+// setHeaders 옵션을 분리하여 타입 에러 우회
+const hlsStaticOptions = {
+  rootPath: join(__dirname, '..', 'hls'),
+  serveRoot: '/hls',
+  setHeaders: (res: any, filePath: string) => {
+    if (filePath.endsWith('.m3u8')) {
+      res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
+    } else if (filePath.endsWith('.ts')) {
+      res.setHeader('Content-Type', 'video/MP2T');
+    }
+  },
+};
 @Module({
   imports: [
+    ServeStaticModule.forRoot(hlsStaticOptions as any),
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'frontend', 'dist'),
+      exclude: ['/api*', '/hls*'], // /hls 경로 충돌 방지
+    }),
+
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

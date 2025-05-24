@@ -21,12 +21,31 @@ const video_history_module_1 = require("./video-history/video-history.module");
 const category_module_1 = require("./category/category.module");
 const comment_module_1 = require("./comment/comment.module");
 const shortform_module_1 = require("./shortform/shortform.module");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
+const hlsStaticOptions = {
+    rootPath: (0, path_1.join)(__dirname, '..', 'hls'),
+    serveRoot: '/hls',
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.m3u8')) {
+            res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
+        }
+        else if (filePath.endsWith('.ts')) {
+            res.setHeader('Content-Type', 'video/MP2T');
+        }
+    },
+};
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            serve_static_1.ServeStaticModule.forRoot(hlsStaticOptions),
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'frontend', 'dist'),
+                exclude: ['/api*', '/hls*'],
+            }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'mysql',
                 host: 'localhost',

@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { VideoService } from './video.service';
 import { Video } from './entities/video.entity';
 import { CategoryService } from 'src/category/category.service';
@@ -7,6 +8,7 @@ export declare class VideoController {
     private readonly categoryService;
     constructor(videoService: VideoService, categoryService: CategoryService);
     create(videoData: Partial<Video>): Promise<Video>;
+    logger: Logger;
     uploadVideo(file: Express.Multer.File, body: {
         title: string;
         description: string;

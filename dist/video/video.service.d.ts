@@ -46,4 +46,5 @@ export declare class VideoService {
         dislikes: number;
     }>;
     incrementViewCount(videoId: number): Promise<number>;
+    convertToHLS(inputPath: string): Promise<string>;
 }

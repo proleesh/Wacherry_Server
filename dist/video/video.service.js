@@ -19,6 +19,9 @@ const typeorm_2 = require("typeorm");
 const video_entity_1 = require("./entities/video.entity");
 const user_entity_1 = require("../user/entities/user.entity");
 const video_reaction_entity_1 = require("./entities/video-reaction.entity");
+const fs = require("fs");
+const ffmpeg = require("fluent-ffmpeg");
+const path = require("path");
 let VideoService = class VideoService {
     constructor(videoRepository, userRepository, reactionRepository) {
         this.videoRepository = videoRepository;
@@ -47,10 +50,9 @@ let VideoService = class VideoService {
         if (!video) {
             throw new common_1.NotFoundException(`ID: ${id} 비디오 없음`);
         }
-        const baseUrl = `${req.protocol}://${req.headers.host}`;
         return {
             ...video,
-            url: `${baseUrl}/${video.url}`,
+            url: video.url,
         };
     }
     remove(id) {
@@ -129,6 +131,59 @@ let VideoService = class VideoService {
         video.views += 1;
         await this.videoRepository.save(video);
         return video.views;
+    }
+    async convertToHLS(inputPath) {
+        if (!inputPath ||
+            typeof inputPath !== 'string' ||
+            inputPath.trim() === '') {
+            throw new Error('‼️Invalid inputPath: 해당 경로는 비어있으면 안됩니다.');
+        }
+        const baseName = path.basename(inputPath, path.extname(inputPath));
+        const outputDir = path.join(__dirname, '..', '..', 'hls', baseName);
+        if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir, { recursive: true });
+        }
+        const ext = path.extname(inputPath).toLowerCase();
+        return new Promise((resolve, reject) => {
+            const command = ffmpeg(inputPath);
+            const outputPath = path.join(outputDir, 'playlist.m3u8');
+            console.log('[FFMPEG 시작] 변환 대상: ', inputPath);
+            console.log('[FFMPEG 진행] 출력 경로: ', outputPath);
+            const options = [
+                '-c:v libx264',
+                '-c:a aac',
+                '-preset veryfast',
+                '-g 25',
+                '-keyint_min 25',
+                '-sc_threshold 0',
+                '-hls_time 4',
+                '-hls_list_size 0',
+                '-start_number 0',
+                '-force_key_frames',
+                'expr:gte(t,n_forced*4)',
+                '-hls_segment_filename',
+                path.join(outputDir, 'segment_%03d.ts'),
+                '-f hls',
+            ];
+            console.log(`[FFMPEG] ${ext} 파일이므로 libx264 재인코딩`);
+            command.outputOptions([...options]);
+            command
+                .on('start', (cmd) => {
+                console.log('[FFMPEG] 명령어]', cmd);
+            })
+                .on('end', () => {
+                console.log('[FFMPEG 완료]');
+                resolve(`hls/${baseName}/playlist.m3u8`);
+            })
+                .on('error', (err, stdout, stderr) => {
+                console.error('[FFMPEG 에러]', err.message);
+                console.error('[STDERR]', stderr);
+                reject(new Error('HLS 변환 실패: ' + err.message));
+            })
+                .output(outputPath)
+                .run();
+            console.log('[변환 결과] ', fs.readdirSync(outputDir));
+        });
     }
 };
 exports.VideoService = VideoService;

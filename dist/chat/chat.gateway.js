@@ -40,7 +40,8 @@ __decorate([
 exports.ChatGateway = ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
-            origin: '*',
+            origin: ['https://www.wacherry.com', 'https://wacherry.com'],
+            credentials: true,
         },
     }),
     __metadata("design:paramtypes", [chat_service_1.ChatService])

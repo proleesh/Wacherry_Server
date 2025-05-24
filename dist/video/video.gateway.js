@@ -49,7 +49,7 @@ __decorate([
 exports.VideoGateway = VideoGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
-            origin: '*',
+            origin: ['https://wacherry.com', 'https://www.wacherry.com'],
             methods: ['GET', 'POST'],
             credentials: true,
         },
