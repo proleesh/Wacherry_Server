@@ -18,13 +18,14 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const video_play_history_entity_1 = require("./entities/video-play-history.entity");
 const video_entity_1 = require("../video/entities/video.entity");
+const user_entity_1 = require("../user/entities/user.entity");
 let VideoHistoryService = class VideoHistoryService {
     constructor(historyRepository) {
         this.historyRepository = historyRepository;
     }
     async create(userId, videoId) {
         console.log('Received userId: ', userId, 'videoId: ', videoId);
-        const userExists = await this.historyRepository.manager.findOne('user', {
+        const userExists = await this.historyRepository.manager.findOne(user_entity_1.User, {
             where: { id: userId },
         });
         const videoExists = await this.historyRepository.manager.findOne(video_entity_1.Video, {
@@ -35,10 +36,9 @@ let VideoHistoryService = class VideoHistoryService {
             throw new Error('User or Video not found');
         }
         try {
-            const history = this.historyRepository.create({
-                user: { id: userId },
-                video: { id: videoId },
-            });
+            const history = new video_play_history_entity_1.VideoPlayHistory();
+            history.user = userExists;
+            history.video = videoExists;
             console.log('Before save: ', history);
             await this.historyRepository.save(history);
             console.log('After save: ', history);
@@ -46,6 +46,7 @@ let VideoHistoryService = class VideoHistoryService {
         }
         catch (error) {
             console.error('Error saving video play history: ', error);
+            throw error;
         }
     }
     async findByUser(userId) {
