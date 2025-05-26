@@ -13,4 +13,5 @@ export declare class Video {
     reactions: VideoReaction[];
     views: number;
     playHistory: VideoPlayHistory[];
+    watched_at: Date;
 }

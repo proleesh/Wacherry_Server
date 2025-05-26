@@ -62,6 +62,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => video_play_history_entity_1.VideoPlayHistory, (history) => history.video),
     __metadata("design:type", Array)
 ], Video.prototype, "playHistory", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], Video.prototype, "watched_at", void 0);
 exports.Video = Video = __decorate([
     (0, typeorm_1.Entity)('videos')
 ], Video);

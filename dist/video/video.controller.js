@@ -91,6 +91,9 @@ let VideoController = class VideoController {
         const views = await this.videoService.incrementViewCount(videoId);
         return { views };
     }
+    async getLikedVideos(userId) {
+        return this.videoService.getLikedVideosByUser(userId);
+    }
 };
 exports.VideoController = VideoController;
 __decorate([
@@ -172,6 +175,13 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], VideoController.prototype, "incrementViewCount", null);
+__decorate([
+    (0, common_1.Get)('/liked/:userId'),
+    __param(0, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], VideoController.prototype, "getLikedVideos", null);
 exports.VideoController = VideoController = __decorate([
     (0, common_1.Controller)('videos'),
     __metadata("design:paramtypes", [video_service_1.VideoService,

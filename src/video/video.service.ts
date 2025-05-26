@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Video } from './entities/video.entity';
@@ -210,5 +206,15 @@ export class VideoService {
         .run();
       console.log('[변환 결과] ', fs.readdirSync(outputDir));
     });
+  }
+
+  // 사용자가 좋아요한 동영상 기록하는 서비스 로직
+  async getLikedVideosByUser(userId: number) {
+    const reactions = await this.reactionRepository.find({
+      where: { user: { id: userId }, reaction: 'like' },
+      relations: ['video'],
+    });
+
+    return reactions.map((r) => r.video);
   }
 }

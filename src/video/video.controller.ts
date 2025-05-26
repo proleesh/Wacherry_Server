@@ -158,4 +158,10 @@ export class VideoController {
     const views = await this.videoService.incrementViewCount(videoId);
     return { views };
   }
+
+  // 좋아요 기록 controller
+  @Get('/liked/:userId')
+  async getLikedVideos(@Param('userId') userId: number) {
+    return this.videoService.getLikedVideosByUser(userId);
+  }
 }

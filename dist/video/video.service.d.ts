@@ -21,6 +21,7 @@ export declare class VideoService {
         reactions: VideoReaction[];
         views: number;
         playHistory: import("../video-history/entities/video-play-history.entity").VideoPlayHistory[];
+        watched_at: Date;
     }[]>;
     findOne(id: number, req: Request): Promise<{
         url: string;
@@ -34,6 +35,7 @@ export declare class VideoService {
         reactions: VideoReaction[];
         views: number;
         playHistory: import("../video-history/entities/video-play-history.entity").VideoPlayHistory[];
+        watched_at: Date;
     }>;
     remove(id: number): Promise<import("typeorm").DeleteResult>;
     reactToVideo(videoId: number, userId: number, reactionType: 'like' | 'dislike'): Promise<{
@@ -47,4 +49,5 @@ export declare class VideoService {
     }>;
     incrementViewCount(videoId: number): Promise<number>;
     convertToHLS(inputPath: string): Promise<string>;
+    getLikedVideosByUser(userId: number): Promise<Video[]>;
 }

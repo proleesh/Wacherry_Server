@@ -185,6 +185,13 @@ let VideoService = class VideoService {
             console.log('[변환 결과] ', fs.readdirSync(outputDir));
         });
     }
+    async getLikedVideosByUser(userId) {
+        const reactions = await this.reactionRepository.find({
+            where: { user: { id: userId }, reaction: 'like' },
+            relations: ['video'],
+        });
+        return reactions.map((r) => r.video);
+    }
 };
 exports.VideoService = VideoService;
 exports.VideoService = VideoService = __decorate([

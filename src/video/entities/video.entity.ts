@@ -1,5 +1,4 @@
 import { Category } from 'src/category/entities/category.entity';
-import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -46,4 +45,7 @@ export class Video {
 
   @OneToMany(() => VideoPlayHistory, (history) => history.video)
   playHistory: VideoPlayHistory[];
+
+  @CreateDateColumn()
+  watched_at: Date;
 }

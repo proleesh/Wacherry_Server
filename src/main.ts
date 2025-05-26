@@ -27,6 +27,8 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
+  app.setGlobalPrefix('api');
+
   await app.listen(3000, '0.0.0.0');
   console.log('✅ 서버 실행 중: https://wacherry.com');
 }
