@@ -16,12 +16,9 @@ const user_service_1 = require("../user/user.service");
 const user_entity_1 = require("../user/entities/user.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const passwordreset_controller_1 = require("../resetaccount/passwordreset.controller");
-const cors = require("cors");
 const config_1 = require("@nestjs/config");
 let AuthModule = class AuthModule {
-    configure(consumer) {
-        consumer.apply(cors()).forRoutes('*');
-    }
+    configure(consumer) { }
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([

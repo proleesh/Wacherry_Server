@@ -31,19 +31,16 @@ let VideoController = class VideoController {
         return this.videoService.create(videoData);
     }
     async uploadVideo(file, body) {
-        if (!file) {
-            throw new common_1.HttpException('비디오 업로드 없음', common_1.HttpStatus.BAD_REQUEST);
-        }
         if (!file || !file.path) {
             this.logger.error('파일이 정의되지 않음 또는 path 없음');
-            throw new common_1.InternalServerErrorException('파일 경로가 존재하지 않습니다.');
+            throw new common_1.HttpException('파일 경로가 존재하지 않습니다.', common_1.HttpStatus.BAD_REQUEST);
         }
         try {
             const category = await this.categoryService.findOne(body.categoryId);
             if (!category) {
                 throw new common_1.NotFoundException('해당 카테고리 못 찾음!');
             }
-            const filePath = path.join('./public/uploads/videos', file.filename);
+            const filePath = file.path;
             console.log('>>> 변환에 전달된 filePath:', filePath);
             if (!fs.existsSync(filePath)) {
                 this.logger.error(`파일 경로 존재하지 않음: ${filePath}`);
@@ -54,6 +51,8 @@ let VideoController = class VideoController {
             console.log('📎 file.filename:', file?.filename);
             console.log('📎 file.destination:', file?.destination);
             console.log('📎 생성된 filePath:', filePath);
+            console.log('📎 file.mimetype:', file.mimetype);
+            console.log('📎 file.originalname:', file.originalname);
             const videoData = {
                 title: body.title,
                 description: body.description,
@@ -112,8 +111,18 @@ __decorate([
                 callback(null, uniqueName);
             },
         }),
+        fileFilter: (req, file, cb) => {
+            const allowedExts = ['.mp4', '.mov', '.mkv'];
+            const ext = path.extname(file.originalname).toLowerCase();
+            if (allowedExts.includes(ext)) {
+                cb(null, true);
+            }
+            else {
+                cb(new Error('Invalid file type'), false);
+            }
+        },
         limits: {
-            fileSize: 100000 * 1024 * 1024,
+            fileSize: 20 * 1024 * 1024 * 1024,
         },
     })),
     __param(0, (0, common_1.UploadedFile)()),

@@ -39,7 +39,5 @@ import { ConfigModule } from '@nestjs/config';
   exports: [JwtModule, JwtAuthGuard, PasswordResetService],
 })
 export class AuthModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(cors()).forRoutes('*');
-  }
+  configure(consumer: MiddlewareConsumer) {}
 }

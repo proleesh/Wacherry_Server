@@ -48,8 +48,17 @@ export class VideoController {
           callback(null, uniqueName);
         },
       }),
+      fileFilter: (req, file, cb) => {
+        const allowedExts = ['.mp4', '.mov', '.mkv'];
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (allowedExts.includes(ext)) {
+          cb(null, true);
+        } else {
+          cb(new Error('Invalid file type'), false);
+        }
+      },
       limits: {
-        fileSize: 100000 * 1024 * 1024, // 100000MB
+        fileSize: 20 * 1024 * 1024 * 1024, // 최대 20GB 지원
       },
     }),
   )
@@ -57,15 +66,12 @@ export class VideoController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: { title: string; description: string; categoryId: number },
   ) {
-    // if (!file?.path) {
-    //   throw new InternalServerErrorException('파일 경로를 찾을 수 없습니다.');
-    // }
-    if (!file) {
-      throw new HttpException('비디오 업로드 없음', HttpStatus.BAD_REQUEST);
-    }
     if (!file || !file.path) {
       this.logger.error('파일이 정의되지 않음 또는 path 없음');
-      throw new InternalServerErrorException('파일 경로가 존재하지 않습니다.');
+      throw new HttpException(
+        '파일 경로가 존재하지 않습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     try {
       const category = await this.categoryService.findOne(body.categoryId);
@@ -73,27 +79,22 @@ export class VideoController {
         throw new NotFoundException('해당 카테고리 못 찾음!');
       }
 
-      // console.log(`‼️[파일 정보]: ${file}`);
-
-      // const inputPath = path.join(file.destination, file.filename);
-
-      const filePath = path.join('./public/uploads/videos', file.filename);
+      // const filePath = path.join('./public/uploads/videos', file.filename);
+      const filePath = file.path;
       console.log('>>> 변환에 전달된 filePath:', filePath);
       if (!fs.existsSync(filePath)) {
         this.logger.error(`파일 경로 존재하지 않음: ${filePath}`);
         throw new InternalServerErrorException('파일 경로 오류');
       }
-      // const filePath = file.path;
 
       const hlsPath = await this.videoService.convertToHLS(filePath);
-
-      // console.log(`[파일 목적지]: ${file?.destination}`);
-      // console.log(`[파일 이름]: ${file?.filename}`);
 
       console.log('⚠️ file:', file);
       console.log('📎 file.filename:', file?.filename);
       console.log('📎 file.destination:', file?.destination);
       console.log('📎 생성된 filePath:', filePath);
+      console.log('📎 file.mimetype:', file.mimetype);
+      console.log('📎 file.originalname:', file.originalname);
 
       const videoData = {
         title: body.title,

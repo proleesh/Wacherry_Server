@@ -17,7 +17,13 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import path, { extname } from 'path';
+import { extname } from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
+import {
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
 
 @Controller('users')
 export class UserController {
@@ -80,14 +86,14 @@ export class UserController {
   @UseInterceptors(
     FileInterceptor('avatar', {
       storage: diskStorage({
-        destination: './public/uploads/avatars',
+        destination: path.join(process.cwd(), 'public', 'uploads', 'avatars'),
         filename: (req, file, cb) => {
           const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
           cb(null, uniqueName);
         },
       }),
       fileFilter: (req, file, cb) => {
-        const allowedMimeTypes = ['image/jpeg', 'image/png'];
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/avif'];
         if (!allowedMimeTypes.includes(file.mimetype)) {
           return cb(new Error('Invalid file type'), false);
         }
@@ -100,7 +106,11 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     if (!file) {
-      throw new Error('No file uploaded');
+      throw new BadRequestException('파일이 업로드되지 않았습니다.');
+    }
+    const filePath = path.join(file.destination, file.filename);
+    if (!fs.existsSync(filePath)) {
+      throw new InternalServerErrorException('파일 저장에 실패했습니다.');
     }
     const avatarUrl = `/uploads/avatars/${file.filename}`;
     await this.userService.updateAvatar(id, avatarUrl);
@@ -111,7 +121,7 @@ export class UserController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './public/uploads/banners',
+        destination: path.join(process.cwd(), 'public', 'uploads', 'banners'),
         filename: (req, file, callback) => {
           const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
           callback(null, uniqueName);

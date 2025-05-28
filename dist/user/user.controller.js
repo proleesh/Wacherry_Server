@@ -20,6 +20,9 @@ const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const uuid_1 = require("uuid");
 const path_1 = require("path");
+const fs = require("fs");
+const path = require("path");
+const common_2 = require("@nestjs/common");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -52,7 +55,11 @@ let UserController = class UserController {
     }
     async uploadAvatar(id, file) {
         if (!file) {
-            throw new Error('No file uploaded');
+            throw new common_2.BadRequestException('파일이 업로드되지 않았습니다.');
+        }
+        const filePath = path.join(file.destination, file.filename);
+        if (!fs.existsSync(filePath)) {
+            throw new common_2.InternalServerErrorException('파일 저장에 실패했습니다.');
         }
         const avatarUrl = `/uploads/avatars/${file.filename}`;
         await this.userService.updateAvatar(id, avatarUrl);
@@ -108,14 +115,14 @@ __decorate([
     (0, common_1.Patch)(':id/avatar'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', {
         storage: (0, multer_1.diskStorage)({
-            destination: './public/uploads/avatars',
+            destination: path.join(process.cwd(), 'public', 'uploads', 'avatars'),
             filename: (req, file, cb) => {
                 const uniqueName = `${(0, uuid_1.v4)()}${(0, path_1.extname)(file.originalname)}`;
                 cb(null, uniqueName);
             },
         }),
         fileFilter: (req, file, cb) => {
-            const allowedMimeTypes = ['image/jpeg', 'image/png'];
+            const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/avif'];
             if (!allowedMimeTypes.includes(file.mimetype)) {
                 return cb(new Error('Invalid file type'), false);
             }
@@ -132,7 +139,7 @@ __decorate([
     (0, common_1.Patch)(':id/banner'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
-            destination: './public/uploads/banners',
+            destination: path.join(process.cwd(), 'public', 'uploads', 'banners'),
             filename: (req, file, callback) => {
                 const uniqueName = `${(0, uuid_1.v4)()}${(0, path_1.extname)(file.originalname)}`;
                 callback(null, uniqueName);

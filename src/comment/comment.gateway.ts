@@ -9,7 +9,8 @@ import { Server, Socket } from 'socket.io';
 import { CommentService } from './comment.service';
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: ['https://wacherry.com', 'https://www.wacherry.com'],
+    credentials: true,
   },
 })
 export class CommentGateway {

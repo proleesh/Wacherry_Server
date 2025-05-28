@@ -42,7 +42,8 @@ __decorate([
 exports.CommentGateway = CommentGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
-            origin: '*',
+            origin: ['https://wacherry.com', 'https://www.wacherry.com'],
+            credentials: true,
         },
     }),
     __metadata("design:paramtypes", [comment_service_1.CommentService])
