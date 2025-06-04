@@ -15,17 +15,9 @@ export class PasswordResetController {
     try {
       const user = await this.passwordResetService.validateResetToken(token);
       if (user) {
-        return res.send(`
-                <html>
-                    <body>
-                    <form method='POST' action='/auth/reset-password'>
-                        <input type="hidden" name="token" value="${token}" />
-                        <input type="password" name="newPassword" placeholder="새 패스워드" required />
-                        <button type="submit">패스워드 변경</button>
-                    </form>
-                    </body>
-                </html>
-                `);
+        return res.redirect(
+          `https://wacherry.com/reset-password?token=${token}`,
+        );
       }
     } catch (error) {
       return res.status(400).send('유효하지 않거나 만료된 토큰입니다.');

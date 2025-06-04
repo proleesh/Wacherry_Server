@@ -30,7 +30,7 @@ export class PasswordResetService {
     user.resetTokenExpiration = resetTokenExpiration;
     await this.userService.save(user);
 
-    const resetUrl = `http://localhost:3000/auth/reset-password?token=${resetToken}`;
+    const resetUrl = `https://wacherry.com/auth/reset-password?token=${resetToken}`;
     await this.mailerService.sendMail({
       to: email,
       subject: '패스워드 다시 설정 요청',

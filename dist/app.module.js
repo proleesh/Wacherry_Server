@@ -23,6 +23,7 @@ const comment_module_1 = require("./comment/comment.module");
 const shortform_module_1 = require("./shortform/shortform.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
+const mail_module_1 = require("./mail/mail.module");
 const hlsStaticOptions = {
     rootPath: (0, path_1.join)(__dirname, '..', 'hls'),
     serveRoot: '/hls',
@@ -65,6 +66,7 @@ exports.AppModule = AppModule = __decorate([
             category_module_1.CategoryModule,
             comment_module_1.CommentModule,
             shortform_module_1.ShortFormModule,
+            mail_module_1.MailModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

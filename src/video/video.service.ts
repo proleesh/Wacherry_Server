@@ -8,6 +8,8 @@ import { VideoReaction } from './entities/video-reaction.entity';
 import * as fs from 'fs';
 import * as ffmpeg from 'fluent-ffmpeg';
 import * as path from 'path';
+import * as ffprobe from 'ffprobe';
+import * as ffprobeStatic from 'ffprobe-static';
 
 @Injectable()
 export class VideoService {
@@ -143,6 +145,18 @@ export class VideoService {
     return video.views;
   }
 
+  // Getting video codec
+  private async getVideoCodec(filePath: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      ffprobe(filePath, { path: ffprobeStatic.path }, (err, info) => {
+        if (err) return reject(err);
+        const stream = info.streams.find((s) => s.codec_type === 'video');
+        if (!stream || !stream.codec_name) return reject(new Error('No video stream found'));
+        resolve(stream.codec_name); // e.g., "h264", "hevc"
+      });
+    });
+  }
+
   // HLS Convert logic
   async convertToHLS(inputPath: string): Promise<string> {
     if (
@@ -161,32 +175,62 @@ export class VideoService {
     }
     const ext = path.extname(inputPath).toLowerCase();
 
+    // 비디오 코덱 동적 확인
+    const codec = await this.getVideoCodec(inputPath);
+
     return new Promise((resolve, reject) => {
       const command = ffmpeg(inputPath);
-
       const outputPath = path.join(outputDir, 'playlist.m3u8');
+      let options: string[] = [];
 
-      console.log('[FFMPEG 시작] 변환 대상: ', inputPath);
-      console.log('[FFMPEG 진행] 출력 경로: ', outputPath);
-      const options = [
-        '-c:v libx264',
-        '-c:a aac',
-        '-preset veryfast',
-        '-g 25',
-        '-keyint_min 25',
-        '-sc_threshold 0',
-        '-hls_time 4',
-        '-hls_list_size 0',
-        '-start_number 0',
-        '-force_key_frames',
-        'expr:gte(t,n_forced*4)',
-        '-hls_segment_filename',
-        path.join(outputDir, 'segment_%03d.ts'),
-        '-f hls',
-      ];
+      // H.264/HEVC 등 복사 및 bsf 적용, 그 외 재인코딩
+      if (codec === 'h264') {
+        options = [
+          '-c:v copy',
+          '-c:a aac',
+          '-bsf:v h264_mp4toannexb',
+          '-hls_time 4',
+          '-hls_list_size 0',
+          '-start_number 0',
+          '-hls_segment_filename',
+          path.join(outputDir, 'segment_%03d.ts'),
+          '-f hls',
+        ];
+        console.log(`[FFMPEG] h264 코덱: copy & bsf 적용`);
+      } else if (codec === 'hevc' || codec === 'h265') {
+        options = [
+          '-c:v copy',
+          '-c:a aac',
+          '-bsf:v hevc_mp4toannexb',
+          '-hls_time 4',
+          '-hls_list_size 0',
+          '-start_number 0',
+          '-hls_segment_filename',
+          path.join(outputDir, 'segment_%03d.ts'),
+          '-f hls',
+        ];
+        console.log(`[FFMPEG] hevc/h265 코덱: copy & bsf 적용`);
+      } else {
+        // 기타 코덱은 재인코딩 필요
+        options = [
+          '-c:v libx264',
+          '-c:a aac',
+          '-preset veryfast',
+          '-g 25',
+          '-keyint_min 25',
+          '-sc_threshold 0',
+          '-hls_time 4',
+          '-hls_list_size 0',
+          '-start_number 0',
+          '-force_key_frames',
+          'expr:gte(t,n_forced*4)',
+          '-hls_segment_filename',
+          path.join(outputDir, 'segment_%03d.ts'),
+          '-f hls',
+        ];
+        console.log(`[FFMPEG] ${codec} 코덱: libx264 재인코딩`);
+      }
 
-      console.log(`[FFMPEG] ${ext} 파일이므로 libx264 재인코딩`);
-      // 재인코딩 필수
       command.outputOptions([...options]);
 
       command
@@ -204,7 +248,7 @@ export class VideoService {
         })
         .output(outputPath)
         .run();
-      console.log('[변환 결과] ', fs.readdirSync(outputDir));
+      // 변환 결과는 end 이벤트에서 확인
     });
   }
 

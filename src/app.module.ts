@@ -14,6 +14,7 @@ import { CommentModule } from './comment/comment.module';
 import { ShortFormModule } from './shortform/shortform.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { MailModule } from './mail/mail.module';
 
 // setHeaders 옵션을 분리하여 타입 에러 우회
 const hlsStaticOptions = {
@@ -55,6 +56,7 @@ const hlsStaticOptions = {
     CategoryModule,
     CommentModule,
     ShortFormModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
