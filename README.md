@@ -1,13 +1,21 @@
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
-  <p align="center">SDEK팀 Spring Boot 프로젝트의 비디오 관련 서비스API NestJS로 구현.</p>
+  <p align="center">SDEK팀 비디오 관련 서비스API</p>
 
 # Wacherry Streaming Platform
 
-## Made by 세명대학교 스마트IT학부 SDEK팀
+## Made by 세명대학교 스마트IT학부 SDEK팀 [🏆캡스톤디자인 우수작품 수상]
 
-## 팀 멤버: 이성혁
+## 지도교수: 이명호
+
+## 지도지원: 조면균
+
+## 팀 리더: 이성혁 (아키텍처 설계 및 총 책임자)
+
+## 팀 멤버: 최민성(동영상 자료수집), 정호성(작동 테스트), 박윤호(동영상 편집 및 업스케일 작업)
+
+## 호스팅 사업자: Amazon Web Service (AWS)
 
 ## ERD
 
