@@ -1,39 +1,55 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <a href="https://nestjs.com/" target="_blank">
+    <img src="https://nestjs.com/img/logo-small.svg" width="120" alt="NestJS Logo" />
+  </a>
 </p>
-  <p align="center">SDEK팀 비디오 관련 서비스API</p>
 
-# Wacherry Streaming Platform
+<h2 align="center">📺 SDEK팀 비디오 관련 서비스 API</h2>
 
-## Made by 세명대학교 스마트IT학부 SDEK팀 [🏆캡스톤디자인 우수작품 수상]
+<h1 align="center">Wacherry Streaming Platform</h1>
 
-## 지도교수: 이명호
+<p align="center">
+  세명대학교 스마트IT학부 SDEK팀<br />
+  🏆 <strong>캡스톤디자인 우수작품 수상</strong>
+</p>
 
-## 지도지원: 조면균
+---
 
-## 팀 리더: 이성혁 (아키텍처 설계 및 총 책임자)
+## 👨‍🏫 지도 및 참여자
 
-## 팀 멤버: 최민성(동영상 자료수집), 정호성(작동 테스트), 박윤호(동영상 편집 및 업스케일 작업)
+- **지도교수**: 이명호
+- **지도지원**: 조면균
 
-## 웹 서버: 비동기 웹 프레임워크 NGINX (최신버전 사용), HTTPS 적용함
+### 👨‍💻 팀 구성
 
-## Skill: NestJS(최신버전 사용) 및 관련 Plugin(최신버전 사용), 암호화처리: SHA-256
+| 역할    | 이름   | 담당                       |
+| ------- | ------ | -------------------------- |
+| 팀 리더 | 이성혁 | 아키텍처 설계 및 총괄 책임 |
+| 팀원    | 최민성 | 동영상 자료 수집           |
+| 팀원    | 정호성 | 작동 테스트                |
+| 팀원    | 박윤호 | 동영상 편집 및 업스케일링  |
 
-## 최신버전: 즉 수시로 새버전 나올때 마다 업그레이드 함, 보안 측면을 고려함
+---
 
-## 호스팅 사업자: Amazon Web Service (AWS)
+## 🌐 서버 및 기술 스택
 
-## ERD
+- **웹 서버**: 최신 버전 NGINX, HTTPS 적용
+- **백엔드 프레임워크**: NestJS (최신 버전 유지)
+- **런타임**: Bun.js
+- **보안**: SHA-256 기반 암호화
+- **호스팅**: Amazon Web Services (AWS)
 
-![alt text](Wacherry_ERD.png)
+---
 
-## UCD
+## ⚙️ 주요 기능
 
-![alt text](<USECASE Diagram.drawio.png>)
+- Nest.js + Bun 기반 백엔드 구현
+- **비디오 업로드**
+- **HLS 기반 스트리밍 제공**
+- **실시간 채팅 (WebSocket)**
+- **HTTPS 보안 통신**
 
-## Skill: Nest.js + bun
-
-### 이 Repository는 Nest.js과 bun로 구축된 Back-end로 구현된 비디오 스트리밍 서비스 API를 제공합니다. 이 서비스는 비디오 업로드, HLS 기반 스트리밍, 실시간 채팅 기능 로직을 구현했습니다.
+---
 
 ## 의존 S/W 컴포넌트
 
