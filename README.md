@@ -2,6 +2,14 @@
   <a href="https://nestjs.com/" target="_blank">
     <img src="https://nestjs.com/img/logo-small.svg" width="120" alt="NestJS Logo" />
   </a>
+  &nbsp;&nbsp;
+  <a href="https://bun.sh/" target="_blank">
+    <img src="https://bun.sh/logo.svg" width="60" alt="Bun.js Logo" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://vitejs.dev/" target="_blank">
+    <img src="https://vitejs.dev/logo.svg" width="60" alt="Vite Logo" />
+  </a>
 </p>
 
 <h2 align="center">📺 SDEK팀 비디오 관련 서비스 API</h2>
